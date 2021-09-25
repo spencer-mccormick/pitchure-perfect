@@ -1,5 +1,5 @@
 extern crate clap;
-use clap::{Arg, App, SubCommand};
+use clap::{Arg, App};
 use std::fs::File;
 
 const SAMPLE_RATE: u64 = 48000;
@@ -72,8 +72,6 @@ fn main() {
         modulus += 1;
     }
 
-    let mut track: Vec<f32> = Vec::new();
-
     let wav_spec = hound::WavSpec {
         channels: 1,
         sample_rate: SAMPLE_RATE as u32,
@@ -87,7 +85,7 @@ fn main() {
         let cd = render_chord(c, length);
 
         for c in cd {
-            wav_writer.write_sample((c * 16777000 as f64) as i32);
+            wav_writer.write_sample((c * 16777000 as f64) as i32).unwrap();
         }
     }
 
