@@ -87,8 +87,7 @@ fn main() {
         let cd = render_chord(c, length);
 
         for c in cd {
-            //println!("C: {} Val: {}\n", c, (c / (SAMPLE_DEPTH as f64).powi(2)) as i32);
-            wav_writer.write_sample((c / (SAMPLE_DEPTH as f64).powi(2)) as i32).unwrap();
+            wav_writer.write_sample((c * 16777000 as f64) as i32);
         }
     }
 
@@ -103,8 +102,7 @@ fn render_chord(pitches: Vec<f64>, length: f64) -> Vec<f64> {
         let mut val: f64 = 0.0;
 
         for pitch in &pitches {
-            val += (((i as f64) * pitch * std::f64::consts::TAU).cos()) / ( pitches.len() as f64);
-            //println!("New val: {}\n", val);
+            val += (1.0 + ((i as f64 / SAMPLE_RATE as f64) * pitch * std::f64::consts::TAU).cos()) / (2.0 * pitches.len() as f64);
         }
 
         amps.push(val as f64);
